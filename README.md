@@ -1,135 +1,114 @@
-# GlobeTrotter – Travel Assistant
+# GlobeTrotter Yaoundé — Phase 2 (Microservices)
 
-GlobeTrotter is a **monolithic Flask application** that serves as the starting point for a semester-long capstone project.  
-Students build the monolith first, then refactor it into microservices, and finally deploy it to the cloud with resilience patterns using Docker, Kubernetes, and cloud-native tooling.
-
----
-.
-## Project Structure
+Le monolithe de la Phase 1 est décomposé en **trois microservices indépendants**
+plus une **API Gateway**, exactement selon l'architecture du cours :
 
 ```
-.
-├── app/
-│   ├── __init__.py         # Flask app factory
-│   ├── models.py           # Data models and JSON file I/O
-│   ├── auth.py             # Registration, login, JWT handling
-│   ├── destinations.py     # Destination search endpoint
-│   ├── recommendations.py  # Personalised recommendations endpoint
-│   ├── itineraries.py      # Create / list itineraries
-│   └── main.py             # App entry point
-├── data/
-│   ├── destinations.json   # Static destination catalogue (seed data)
-│   ├── users.json          # Created at runtime
-│   └── itineraries.json    # Created at runtime
-├── tests/                  # Placeholder for future tests
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-└── README.md
+                    Navigateur
+                        │
+                 API Gateway (5000)
+                        │  sert aussi le frontend statique
+        ┌───────────────┼────────────────┐
+        │                │                │
+  User Service    Itinerary Service  Recommendation Service
+     (5001)            (5002)              (5003)
+        │                │                │
+   users.json      itineraries.json   places.json
+                    favorites.json    (30 lieux)
+                    reviews.json
 ```
 
----
+Chaque service a **son propre processus Flask et son propre stockage JSON** —
+aucune base de données partagée. Les services communiquent entre eux par de
+**vrais appels HTTP synchrones** (bibliothèque `requests`) :
 
-## REST API
+- `recommendation-service` interroge `user-service` (`GET /api/me`) pour les
+  préférences de l'utilisateur, et `itinerary-service`
+  (`GET /internal/favorites/<user_id>`) pour ses favoris, afin de calculer des
+  recommandations personnalisées.
+- `itinerary-service` interroge `recommendation-service`
+  (`GET /internal/places?ids=...`) pour connaître le prix des lieux et calculer
+  le budget estimé d'un voyage.
+- `itinerary-service` interroge `user-service` (`GET /api/me`) pour attacher le
+  nom de l'auteur à un avis.
 
-| Method | Endpoint            | Auth required | Description                              |
-|--------|---------------------|---------------|------------------------------------------|
-| POST   | `/register`         | No            | Register a new user                      |
-| POST   | `/login`            | No            | Authenticate and receive a JWT token     |
-| GET    | `/destinations`     | No            | Search the destination catalogue         |
-| GET    | `/recommendations`  | Yes (JWT)     | Get personalised recommendations        |
-| POST   | `/itineraries`      | Yes (JWT)     | Create a new itinerary                   |
-| GET    | `/itineraries`      | Yes (JWT)     | List all itineraries for the logged-in user |
+L'**API Gateway** est le seul point d'entrée pour le navigateur : elle route
+chaque appel `/api/...` vers le microservice propriétaire de cette donnée, et
+sert aussi les fichiers statiques du frontend (`frontend/`).
 
-Protected routes expect the header:  
-`Authorization: Bearer <your-token>`
+## Lancer le projet
 
-### Example requests
+### Option A — avec Docker (recommandé pour Phase 2)
 
 ```bash
-# Register
-curl -X POST http://localhost:5000/register \
-  -H "Content-Type: application/json" \
-  -d '{"username": "alice", "password": "s3cr3t", "preferences": ["beach", "food"]}'
-
-# Login
-curl -X POST http://localhost:5000/login \
-  -H "Content-Type: application/json" \
-  -d '{"username": "alice", "password": "s3cr3t"}'
-# Save the returned token: TOKEN=<value from .token field>
-
-# Search destinations
-curl "http://localhost:5000/destinations?tag=beach&max_cost=100"
-
-# Personalised recommendations
-curl http://localhost:5000/recommendations \
-  -H "Authorization: Bearer $TOKEN"
-
-# Create an itinerary
-curl -X POST http://localhost:5000/itineraries \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"title": "Beach Escape", "destinations": ["Bali"], "start_date": "2025-07-01", "end_date": "2025-07-14"}'
-
-# List itineraries
-curl http://localhost:5000/itineraries \
-  -H "Authorization: Bearer $TOKEN"
+docker compose up --build
 ```
 
----
+Cela construit et démarre les quatre conteneurs (`user-service`,
+`itinerary-service`, `recommendation-service`, `api-gateway`) sur leur propre
+réseau Docker : les services s'appellent entre eux par leur nom de conteneur
+(`http://user-service:5001`, etc.) au lieu de `localhost`, ce qui est
+configuré via les variables d'environnement dans `docker-compose.yml`. Les
+dossiers `data/` de chaque service sont montés en volume, donc vos données
+persistent entre deux `docker compose up`.
 
-## Running Locally
+Ouvrez ensuite **http://localhost:5000**. Pour tout arrêter :
+`docker compose down` (ajoutez `-v` pour aussi supprimer les données).
 
-### Prerequisites
-- Python 3.9+
-- pip
+### Option B — sans Docker, en Python directement
+
+Tout lancer d'un coup :
 
 ```bash
-# 1. Install dependencies
 pip install -r requirements.txt
-
-# 2. Start the server
-python app/main.py
+python run_all.py
 ```
 
-The API will be available at `http://localhost:5000`.
-
----
-
-## Running with Docker
+Ou un terminal par service (utile pour observer chaque service séparément) :
 
 ```bash
-# Build and start
-docker-compose up --build
-
-# Stop
-docker-compose down
+cd services/user-service && python app.py            # port 5001
+cd services/itinerary-service && python app.py        # port 5002
+cd services/recommendation-service && python app.py   # port 5003
+cd services/api-gateway && python app.py               # port 5000
 ```
 
-The `data/` directory is mounted into the container, so JSON files persist between runs.
+Dans les deux cas, vérifiez que tout est en ligne avec
+`GET http://localhost:5000/gateway/health`.
 
----
+## Nouveautés de la Phase 2
 
-## Data Storage
+- **30 lieux** (20 initiaux + 10 nouveaux : Stade Ahmadou Ahidjo, Aéroport de
+  Nsimalen, Gare de Yaoundé, Basilique de Mvolyé, Santa Lucia Mall, Canal
+  Olympia, Village Artisanal, Zoo de Mvog-Betsi, Institut Français, immeuble
+  de la BEAC), répartis sur 16 catégories.
+- **Photos réseau réelles** : chaque fiche essaie de charger une vraie photo
+  du lieu depuis Wikipédia (via son API publique, sans clé requise) et ne
+  retombe sur une image de remplacement stable que si aucune photo n'est
+  trouvée.
+- **Sélecteur de langue FR/EN** dans la barre de navigation (bouton à côté du
+  thème) : traduit l'interface (menus, boutons, titres) et bascule les
+  descriptions des lieux vers leur version anglaise quand elle existe.
+- Toutes les fonctionnalités de la Phase 1 restent disponibles : recherche et
+  filtres, carte OpenStreetMap 3D, itinéraire routier depuis la position du
+  visiteur (OSRM), favoris, avis, planificateur de voyage avec budget estimé
+  et lien de partage.
 
-All data is persisted in plain JSON files inside the `data/` directory:
+## Défis rencontrés (voir aussi le support de cours)
 
-| File                    | Purpose                              |
-|-------------------------|--------------------------------------|
-| `data/destinations.json`| Static catalogue of travel destinations (seed data) |
-| `data/users.json`       | Registered users (created at runtime) |
-| `data/itineraries.json` | User itineraries (created at runtime) |
-
-> **Note:** `data/*.json` (except `destinations.json`) are excluded from version control via `.gitignore`.
-
----
-
-## Configuration
-
-| Environment Variable | Default                              | Description           |
-|----------------------|--------------------------------------|-----------------------|
-| `SECRET_KEY`         | `globetrotter-secret-change-in-prod` | JWT signing key – **must be overridden in production** |
-| `FLASK_DEBUG`        | `0`                                  | Set to `1` to enable Flask debug mode (development only) |
-| `PORT`               | `5000`                               | Port the app listens on |
-
-> **Important:** Always set `SECRET_KEY` to a long, random value in production (e.g. `python -c "import secrets; print(secrets.token_hex(32))"`).
+- **Latence réseau** : chaque recommandation personnalisée déclenche
+  désormais deux appels HTTP supplémentaires (vers user-service et
+  itinerary-service) — sensible mais mesuré et acceptable en local.
+- **Cohérence des données** : les 30 lieux n'existent que dans
+  `recommendation-service` ; les deux autres services ne stockent que des
+  identifiants et interrogent ce service pour les détails, pour éviter toute
+  divergence.
+- **Découverte de service** : simplifiée ici via des URLs configurables par
+  variables d'environnement (`USER_SERVICE_URL`, `ITINERARY_SERVICE_URL`,
+  `RECOMMENDATION_SERVICE_URL`) — `localhost:<port>` en local, noms de
+  conteneurs Docker (`http://user-service:5001`, etc.) avec `docker compose`
+  — une vraie registry (Consul, etc.) serait l'étape suivante en Phase 3/4.
+- **Débogage distribué** : chaque service journalise indépendamment
+  (`user.log`, `itinerary.log`, `reco.log`, `gateway.log` si vous utilisez
+  `run_all.py`), ce qui rend le suivi d'une requête à travers les services
+  plus difficile qu'avec le monolithe de la Phase 1.

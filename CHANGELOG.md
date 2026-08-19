@@ -1,6 +1,50 @@
-# Changelog — GlobeTrotter Yaoundé (Phase 1)
+# Changelog — GlobeTrotter Yaoundé
 
 Toutes les versions notables de ce projet sont documentées ici.
+
+## [2.1.0] — 2026-08-16
+
+### Ajouté — Conteneurisation Docker
+- `Dockerfile` pour chacun des quatre services (`user-service`,
+  `itinerary-service`, `recommendation-service`, `api-gateway`).
+- `docker-compose.yml` à la racine orchestrant les quatre conteneurs sur un
+  réseau Docker commun ; les services se joignent par nom de conteneur
+  (`http://user-service:5001`, etc.) plutôt que par `localhost`.
+- Les services internes (`user-service`, `itinerary-service`,
+  `recommendation-service`) écoutent désormais sur `0.0.0.0` (au lieu de
+  `127.0.0.1`) pour être joignables depuis d'autres conteneurs.
+- Les dossiers `data/` de chaque service sont montés en volume Docker, donc
+  les données JSON persistent entre deux `docker compose up`.
+- `.dockerignore` à la racine.
+- `README.md` mis à jour avec les instructions `docker compose up --build`
+  en plus du lancement Python direct (les deux méthodes restent supportées).
+
+## [2.0.0] — 2026-08-16
+
+### Ajouté — Phase 2 (Microservices)
+- Décomposition du monolithe en **trois microservices indépendants** +
+  une **API Gateway**, chacun avec son propre processus Flask et son propre
+  stockage JSON, communiquant par de vrais appels HTTP (`requests`) :
+  - `user-service` (5001) — registration/login/profil
+  - `itinerary-service` (5002) — itinéraires, favoris, avis ; appelle
+    `user-service` et `recommendation-service`
+  - `recommendation-service` (5003) — les 30 lieux et les recommandations
+    personnalisées ; appelle `user-service` et `itinerary-service`
+  - `api-gateway` (5000) — point d'entrée unique, route chaque appel vers le
+    bon service, sert aussi le frontend
+- **10 nouveaux lieux** (30 au total) : Stade Ahmadou Ahidjo, Aéroport de
+  Nsimalen, Gare de Yaoundé, Basilique de Mvolyé, Santa Lucia Mall, Canal
+  Olympia, Village Artisanal, Zoo de Mvog-Betsi, Institut Français, immeuble
+  de la BEAC — avec descriptions bilingues FR/EN.
+- **Photos réseau réelles** des lieux, récupérées depuis l'API publique de
+  Wikipédia, avec repli sur une image stable si aucune photo n'est trouvée.
+- **Sélecteur de langue FR/EN** dans la barre de navigation, traduisant
+  l'interface et les descriptions des lieux.
+- `run_all.py` pour lancer les quatre services en une seule commande.
+- Testé de bout en bout : inscription, recommandations personnalisées
+  (appels croisés user-service + itinerary-service), ajout de favori,
+  création d'itinéraire avec budget calculé via un appel à
+  recommendation-service, avis avec nom d'auteur récupéré via user-service.
 
 ## [1.1.1] — 2026-08-16
 

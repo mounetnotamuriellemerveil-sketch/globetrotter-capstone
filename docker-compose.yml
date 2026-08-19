@@ -1,13 +1,54 @@
-version: "3.9"
-
 services:
-  globetrotter:
-    build: .
-    container_name: globetrotter_app
+  user-service:
+    build:
+      context: ./services/user-service
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./services/user-service/data:/app/data
+    restart: unless-stopped
+
+  itinerary-service:
+    build:
+      context: ./services/itinerary-service
+    ports:
+      - "5002:5002"
+    environment:
+      - USER_SERVICE_URL=http://user-service:5001
+      - RECOMMENDATION_SERVICE_URL=http://recommendation-service:5003
+    volumes:
+      - ./services/itinerary-service/data:/app/data
+    depends_on:
+      - user-service
+      - recommendation-service
+    restart: unless-stopped
+
+  recommendation-service:
+    build:
+      context: ./services/recommendation-service
+    ports:
+      - "5003:5003"
+    environment:
+      - USER_SERVICE_URL=http://user-service:5001
+      - ITINERARY_SERVICE_URL=http://itinerary-service:5002
+    volumes:
+      - ./services/recommendation-service/data:/app/data
+    depends_on:
+      - user-service
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
     ports:
       - "5000:5000"
-    # Mount local code so changes are reflected without rebuilding the image
-    volumes:
-      - .:/globetrotter
     environment:
-      - PORT=5000
+      - USER_SERVICE_URL=http://user-service:5001
+      - ITINERARY_SERVICE_URL=http://itinerary-service:5002
+      - RECOMMENDATION_SERVICE_URL=http://recommendation-service:5003
+    depends_on:
+      - user-service
+      - itinerary-service
+      - recommendation-service
+    restart: unless-stopped
