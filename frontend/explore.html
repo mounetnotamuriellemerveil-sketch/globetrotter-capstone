@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explorer — GlobeTrotter Yaoundé</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+<link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="container" style="padding-top:32px;">
+  <div class="section-head">
+    <div>
+      <div class="kicker" data-i18n="explore_kicker"></div>
+      <h2 data-i18n="explore_title"></h2>
+    </div>
+  </div>
+
+  <div class="map-toolbar">
+    <span class="hint" data-i18n="map_hint"></span>
+  </div>
+  <div id="map" class="explore-map"></div>
+
+  <div class="explore-layout" style="margin-top:8px;">
+    <aside class="filters">
+      <h4 data-i18n="search_label"></h4>
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="q" type="text" data-i18n-ph="search_ph">
+      </div>
+      <h4 data-i18n="filter_category"></h4>
+      <div id="filter-chips" class="chip-row"></div>
+      <h4 data-i18n="filter_budget"></h4>
+      <input id="price" type="range" min="0" max="4" value="4" style="width:100%;">
+      <div class="range-row"><span id="budget-free-label"></span><span id="price-label"></span></div>
+    </aside>
+
+    <main>
+      <div id="results-count" class="hint" style="color:var(--muted);font-size:.85rem;margin-bottom:10px;"></div>
+      <div id="results" class="grid"><div class="spinner"></div></div>
+    </main>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+<script src="js/app.js"></script>
+<script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+<script src="js/map.js"></script>
+<script>
+let map, allPlaces = [];
+const params = new URLSearchParams(location.search);
+let state = { q: "", category: params.get("category") || "all", maxPrice: 4 };
+
+document.getElementById("budget-free-label").textContent = t("free");
+
+function priceLabel(v) {
+  return v == 4 ? t("budget_all") : v == 0 ? t("budget_free") : "≤ " + "●".repeat(v);
+}
+document.getElementById("price-label").textContent = priceLabel(4);
+
+async function loadCategories() {
+  const { categories } = await api("/api/categories");
+  const chips = ["all", ...categories].map((c) => {
+    const m = c === "all" ? { label: Store.getLang() === "en" ? "All" : "Toutes", icon: "✨" } : categoryMeta(c);
+    return `<button type="button" class="chip ${state.category === c ? "active" : ""}" data-cat="${c}">${m.icon} ${m.label}</button>`;
+  }).join("");
+  document.getElementById("filter-chips").innerHTML = chips;
+  document.querySelectorAll("[data-cat]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.category = btn.dataset.cat;
+      document.querySelectorAll("[data-cat]").forEach((b) => b.classList.toggle("active", b === btn));
+      search();
+    });
+  });
+}
+
+async function search() {
+  const qs = new URLSearchParams();
+  if (state.q) qs.set("q", state.q);
+  if (state.category && state.category !== "all") qs.set("category", state.category);
+  qs.set("max_price", state.maxPrice);
+  const { places, count } = await api("/api/places?" + qs.toString());
+  allPlaces = places;
+  const lang = Store.getLang();
+  document.getElementById("results-count").textContent = lang === "en"
+    ? `${count} place${count > 1 ? "s" : ""} found`
+    : `${count} lieu${count > 1 ? "x" : ""} trouvé${count > 1 ? "s" : ""}`;
+  document.getElementById("results").innerHTML = places.length
+    ? places.map(cardHtml).join("")
+    : `<div class="empty-state">${lang === "en" ? "No place matches your search." : "Aucun lieu ne correspond à votre recherche."}</div>`;
+  hydrateImages(document.getElementById("results"));
+  document.querySelectorAll(".card .fav").forEach((b) => b.addEventListener("click", toggleFav));
+  if (map) {
+    document.querySelectorAll(".maplibregl-marker").forEach((m) => m.remove());
+    addPlaceMarkers(map, places, { onSelect: (p) => (location.href = "place.html?id=" + p.id) });
+  }
+}
+
+function cardHtml(p) {
+  const meta = categoryMeta(p.category);
+  return `
+  <div class="card">
+    <a href="place.html?id=${p.id}" style="display:contents;">
+      <div class="thumb">
+        ${placeImgTag(p)}
+        <span class="cat">${meta.icon} ${meta.label}</span>
+      </div>
+    </a>
+    <button class="fav" data-id="${p.id}" title="${t("fav_add")}">🤍</button>
+    <div class="body">
+      <a href="place.html?id=${p.id}"><h3>${p.name}</h3></a>
+      <div class="meta"><span class="rating">${stars(p.rating)}</span><span>${p.rating.toFixed(1)}</span><span>· ${p.quartier}</span></div>
+      <p class="desc">${placeText(p, "description")}</p>
+      <div class="foot">${priceDots(p.price_level)}<a href="place.html?id=${p.id}" class="btn btn-ghost btn-sm">${t("see_more")}</a></div>
+    </div>
+  </div>`;
+}
+
+async function toggleFav(e) {
+  if (!Store.getToken()) { toast(Store.getLang() === "en" ? "Log in to save a favorite" : "Connectez-vous pour enregistrer un favori"); return; }
+  const id = e.currentTarget.dataset.id;
+  try {
+    await api(`/api/favorites/${id}`, { method: "POST" });
+    e.currentTarget.textContent = "❤️";
+    toast(Store.getLang() === "en" ? "Added to your favorites" : "Ajouté à vos favoris");
+  } catch (err) { toast(err.message); }
+}
+
+document.getElementById("q").addEventListener("input", (e) => { state.q = e.target.value; clearTimeout(window._deb); window._deb = setTimeout(search, 250); });
+document.getElementById("price").addEventListener("input", (e) => {
+  state.maxPrice = Number(e.target.value);
+  document.getElementById("price-label").textContent = priceLabel(state.maxPrice);
+  search();
+});
+
+map = makeMap("map", { pitch: 50 });
+loadCategories().then(search);
+</script>
+</body>
+</html>

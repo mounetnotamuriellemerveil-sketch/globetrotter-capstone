@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connexion — GlobeTrotter Yaoundé</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="kicker" id="lk-kicker">Bon retour</div>
+    <h2 id="lk-title">Connexion</h2>
+    <div id="err" class="form-error"></div>
+    <form id="login-form">
+      <div class="field"><label>Email</label><input type="email" id="email" required autocomplete="email"></div>
+      <div class="field"><label id="lk-pw">Mot de passe</label><input type="password" id="password" required autocomplete="current-password"></div>
+      <button class="btn btn-primary btn-block" type="submit" id="lk-submit">Se connecter</button>
+    </form>
+    <p class="form-note" id="lk-note">Pas encore de compte ? <a href="register.html" style="color:var(--green);font-weight:700;">Créer un compte</a></p>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+<script src="js/app.js"></script>
+<script>
+if (Store.getLang() === "en") {
+  document.getElementById("lk-kicker").textContent = "Welcome back";
+  document.getElementById("lk-title").textContent = "Log in";
+  document.getElementById("lk-pw").textContent = "Password";
+  document.getElementById("lk-submit").textContent = "Log in";
+  document.getElementById("lk-note").innerHTML = 'No account yet? <a href="register.html" style="color:var(--green);font-weight:700;">Sign up</a>';
+}
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const errEl = document.getElementById("err");
+  errEl.style.display = "none";
+  try {
+    const { token, user } = await api("/api/login", {
+      method: "POST",
+      body: JSON.stringify({ email: document.getElementById("email").value, password: document.getElementById("password").value }),
+    });
+    Store.setToken(token);
+    Store.setUser(user);
+    toast((Store.getLang() === "en" ? "Welcome, " : "Bienvenue, ") + user.name.split(" ")[0] + " !");
+    setTimeout(() => (location.href = "index.html"), 400);
+  } catch (err) {
+    errEl.textContent = err.message;
+    errEl.style.display = "block";
+  }
+});
+</script>
+</body>
+</html>

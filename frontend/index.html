@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GlobeTrotter Yaoundé — Découvrez la ville aux sept collines</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<header class="hero">
+  <div class="container">
+    <div>
+      <span class="eyebrow" data-i18n="hero_badge">● Phase 2 · Architecture microservices</span>
+      <h1><span data-i18n="hero_title_pre"></span><em data-i18n="hero_title_em"></em><span data-i18n="hero_title_post"></span></h1>
+      <p class="lede" data-i18n="hero_lede"></p>
+      <div class="hero-cta">
+        <a href="explore.html" class="btn btn-primary" data-i18n="hero_cta_explore"></a>
+        <a href="trip.html" class="btn btn-ghost" data-i18n="hero_cta_trip"></a>
+      </div>
+      <div class="hero-stats">
+        <div><b>30</b><span data-i18n="stat_places"></span></div>
+        <div><b>16</b><span data-i18n="stat_categories"></span></div>
+        <div><b>7</b><span data-i18n="stat_hills"></span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="https://picsum.photos/seed/yaounde-hero-hills/900/1100" data-query="Yaoundé Cameroun ville sept collines" data-w="900" alt="Vue de Yaoundé">
+      <div class="tag"><span class="dot"></span> Yaoundé, Centre, Cameroun</div>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="kicker" data-i18n="reco_kicker"></div>
+        <h2 data-i18n="reco_title"></h2>
+      </div>
+      <a href="explore.html" class="btn btn-ghost btn-sm" data-i18n="see_all"></a>
+    </div>
+    <div id="reco-grid" class="grid"><div class="spinner"></div></div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="kicker" data-i18n="cat_kicker"></div>
+        <h2 data-i18n="cat_title"></h2>
+      </div>
+    </div>
+    <div id="cat-chips" class="chip-row"></div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+<script src="js/app.js"></script>
+<script>
+async function loadHome() {
+  try {
+    const { places } = await api("/api/recommendations");
+    document.getElementById("reco-grid").innerHTML = places.map(cardHtml).join("");
+    hydrateImages(document.getElementById("reco-grid"));
+  } catch (e) {
+    document.getElementById("reco-grid").innerHTML = `<p>Impossible de charger les recommandations pour le moment.</p>`;
+  }
+  try {
+    const { categories } = await api("/api/categories");
+    document.getElementById("cat-chips").innerHTML = categories
+      .map((c) => {
+        const m = categoryMeta(c);
+        return `<a href="explore.html?category=${c}" class="chip">${m.icon} ${m.label}</a>`;
+      })
+      .join("");
+  } catch (e) {}
+}
+
+function cardHtml(p) {
+  const meta = categoryMeta(p.category);
+  return `
+  <a href="place.html?id=${p.id}" class="card">
+    <div class="thumb">
+      ${placeImgTag(p)}
+      <span class="cat">${meta.icon} ${meta.label}</span>
+    </div>
+    <div class="body">
+      <h3>${p.name}</h3>
+      <div class="meta"><span class="rating">${stars(p.rating)}</span><span>${p.rating.toFixed(1)}</span><span>· ${p.quartier}</span></div>
+      <p class="desc">${placeText(p, "description")}</p>
+      <div class="foot">${priceDots(p.price_level)}<span class="btn btn-ghost btn-sm">${t("see_more")}</span></div>
+    </div>
+  </a>`;
+}
+
+loadHome();
+</script>
+</body>
+</html>
