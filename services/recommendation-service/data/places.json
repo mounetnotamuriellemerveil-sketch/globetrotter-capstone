@@ -1,0 +1,554 @@
+[
+  {
+    "id": 1,
+    "name": "Musée National du Cameroun",
+    "category": "musee",
+    "lat": 3.8667,
+    "lng": 11.5167,
+    "quartier": "Centre-ville",
+    "description": "Ancien palais présidentiel transformé en musée retraçant l'histoire, l'art et les traditions des dix régions du Cameroun.",
+    "description_en": "A former presidential palace turned museum, tracing the history, art and traditions of Cameroon's ten regions.",
+    "rating": 4.6,
+    "price_level": 1,
+    "tags": [
+      "histoire",
+      "culture",
+      "art"
+    ],
+    "image_query": "Musée National du Cameroun Yaoundé",
+    "image_seed": "national-museum-yaounde"
+  },
+  {
+    "id": 2,
+    "name": "Palais des Congrès",
+    "category": "monument",
+    "lat": 3.873,
+    "lng": 11.5188,
+    "quartier": "Centre administratif",
+    "description": "Immense complexe conçu pour les sommets internationaux, reconnaissable à sa silhouette futuriste dominant la ville.",
+    "description_en": "A vast complex built for international summits, its futuristic silhouette dominates the city skyline.",
+    "rating": 4.3,
+    "price_level": 0,
+    "tags": [
+      "architecture",
+      "evenements"
+    ],
+    "image_query": "Palais des Congrès Yaoundé",
+    "image_seed": "palais-congres-yaounde"
+  },
+  {
+    "id": 3,
+    "name": "Marché Central de Yaoundé",
+    "category": "marche",
+    "lat": 3.8656,
+    "lng": 11.5178,
+    "quartier": "Centre-ville",
+    "description": "Le grand marché historique de la capitale : tissus, épices, artisanat et vie urbaine trépidante au cœur de Yaoundé.",
+    "description_en": "The capital's historic central market: fabrics, spices, crafts and bustling street life in the heart of Yaoundé.",
+    "rating": 4.1,
+    "price_level": 1,
+    "tags": [
+      "shopping",
+      "artisanat",
+      "local"
+    ],
+    "image_query": "Marché Central Yaoundé",
+    "image_seed": "marche-central-yaounde"
+  },
+  {
+    "id": 4,
+    "name": "Marché Mokolo",
+    "category": "marche",
+    "lat": 3.8721,
+    "lng": 11.4989,
+    "quartier": "Mokolo",
+    "description": "Le plus grand marché populaire de la ville, réputé pour ses prix et son ambiance authentique quartier par quartier.",
+    "description_en": "The city's largest popular market, known for its prices and its authentic, neighbourhood-by-neighbourhood atmosphere.",
+    "rating": 4.0,
+    "price_level": 1,
+    "tags": [
+      "shopping",
+      "local",
+      "nourriture"
+    ],
+    "image_query": "Marché Mokolo Yaoundé",
+    "image_seed": "marche-mokolo-yaounde"
+  },
+  {
+    "id": 5,
+    "name": "Cathédrale Notre-Dame des Victoires",
+    "category": "religieux",
+    "lat": 3.8683,
+    "lng": 11.5194,
+    "quartier": "Centre-ville",
+    "description": "Cathédrale catholique emblématique du centre-ville, connue pour son architecture élégante et ses vitraux.",
+    "description_en": "An emblematic Catholic cathedral in the city centre, known for its elegant architecture and stained-glass windows.",
+    "rating": 4.7,
+    "price_level": 0,
+    "tags": [
+      "religion",
+      "architecture",
+      "calme"
+    ],
+    "image_query": "Cathédrale Notre-Dame des Victoires Yaoundé",
+    "image_seed": "cathedrale-yaounde"
+  },
+  {
+    "id": 6,
+    "name": "Mosquée Centrale de Yaoundé",
+    "category": "religieux",
+    "lat": 3.8694,
+    "lng": 11.5147,
+    "quartier": "Briqueterie",
+    "description": "Principal lieu de culte musulman de la capitale, au cœur du quartier historique de la Briqueterie.",
+    "description_en": "The capital's main Muslim place of worship, at the heart of the historic Briqueterie district.",
+    "rating": 4.5,
+    "price_level": 0,
+    "tags": [
+      "religion",
+      "architecture"
+    ],
+    "image_query": "Mosquée Centrale Yaoundé Briqueterie",
+    "image_seed": "mosquee-yaounde"
+  },
+  {
+    "id": 7,
+    "name": "Université de Yaoundé I",
+    "category": "ecole",
+    "lat": 3.8703,
+    "lng": 11.501,
+    "quartier": "Ngoa-Ekélé",
+    "description": "Plus ancienne et plus grande université du pays, campus verdoyant animé par une vie étudiante intense.",
+    "description_en": "The country's oldest and largest university, a leafy campus buzzing with student life.",
+    "rating": 4.2,
+    "price_level": 0,
+    "tags": [
+      "education",
+      "campus"
+    ],
+    "image_query": "Université de Yaoundé I",
+    "image_seed": "universite-yaounde-1"
+  },
+  {
+    "id": 8,
+    "name": "Lycée Général Leclerc",
+    "category": "ecole",
+    "lat": 3.8781,
+    "lng": 11.5211,
+    "quartier": "Tsinga",
+    "description": "L'un des lycées les plus réputés du Cameroun, pépinière historique de l'élite intellectuelle nationale.",
+    "description_en": "One of Cameroon's most respected high schools, historically a training ground for the national intellectual elite.",
+    "rating": 4.4,
+    "price_level": 0,
+    "tags": [
+      "education"
+    ],
+    "image_query": "Lycée Général Leclerc Yaoundé",
+    "image_seed": "lycee-leclerc-yaounde"
+  },
+  {
+    "id": 9,
+    "name": "Hôpital Central de Yaoundé",
+    "category": "hopital",
+    "lat": 3.8639,
+    "lng": 11.5158,
+    "quartier": "Centre-ville",
+    "description": "Principal hôpital de référence de la capitale, offrant des soins généraux et spécialisés 24h/24.",
+    "description_en": "The capital's main referral hospital, offering general and specialist care around the clock.",
+    "rating": 3.9,
+    "price_level": 1,
+    "tags": [
+      "sante",
+      "urgences"
+    ],
+    "image_query": "Hôpital Central de Yaoundé",
+    "image_seed": "hopital-central-yaounde"
+  },
+  {
+    "id": 10,
+    "name": "Hôpital Gynéco-Obstétrique et Pédiatrique",
+    "category": "hopital",
+    "lat": 3.8825,
+    "lng": 11.5089,
+    "quartier": "Ngousso",
+    "description": "Centre hospitalier spécialisé en santé maternelle et infantile, reconnu pour la qualité de sa prise en charge.",
+    "description_en": "A hospital specialised in maternal and child health, recognised for the quality of its care.",
+    "rating": 4.0,
+    "price_level": 1,
+    "tags": [
+      "sante",
+      "famille"
+    ],
+    "image_query": "Hôpital Gynéco-Obstétrique Yaoundé",
+    "image_seed": "hgope-yaounde"
+  },
+  {
+    "id": 11,
+    "name": "Bibliothèque Municipale de Yaoundé",
+    "category": "bibliotheque",
+    "lat": 3.8667,
+    "lng": 11.514,
+    "quartier": "Centre-ville",
+    "description": "Espace calme de lecture et de recherche au centre-ville, ouvert aux étudiants et au grand public.",
+    "description_en": "A quiet reading and research space downtown, open to students and the general public.",
+    "rating": 4.2,
+    "price_level": 0,
+    "tags": [
+      "lecture",
+      "etude",
+      "calme"
+    ],
+    "image_query": "Bibliothèque Municipale Yaoundé",
+    "image_seed": "bibliotheque-yaounde"
+  },
+  {
+    "id": 12,
+    "name": "Jardin Botanique de Yaoundé",
+    "category": "parc",
+    "lat": 3.8608,
+    "lng": 11.5236,
+    "quartier": "Nlongkak",
+    "description": "Poumon vert de la ville, idéal pour une promenade parmi les essences locales et respirer un peu d'air frais.",
+    "description_en": "The city's green lung, ideal for a stroll among native trees and a breath of fresh air.",
+    "rating": 4.3,
+    "price_level": 0,
+    "tags": [
+      "nature",
+      "detente",
+      "famille"
+    ],
+    "image_query": "Jardin Botanique Yaoundé",
+    "image_seed": "jardin-botanique-yaounde"
+  },
+  {
+    "id": 13,
+    "name": "Parc National de Mefou",
+    "category": "parc",
+    "lat": 3.6667,
+    "lng": 11.4667,
+    "quartier": "Périphérie sud",
+    "description": "Sanctuaire de primates à une demi-heure de la capitale, refuge pour gorilles et chimpanzés orphelins.",
+    "description_en": "A primate sanctuary half an hour from the capital, home to orphaned gorillas and chimpanzees.",
+    "rating": 4.8,
+    "price_level": 2,
+    "tags": [
+      "nature",
+      "faune",
+      "excursion"
+    ],
+    "image_query": "Mefou National Park Cameroon",
+    "image_seed": "parc-mefou-yaounde"
+  },
+  {
+    "id": 14,
+    "name": "Mont Fébé",
+    "category": "parc",
+    "lat": 3.9,
+    "lng": 11.5167,
+    "quartier": "Fébé",
+    "description": "L'une des sept collines mythiques de Yaoundé, offrant un panorama complet sur la ville depuis son sommet.",
+    "description_en": "One of Yaoundé's seven legendary hills, offering a sweeping view over the city from its summit.",
+    "rating": 4.6,
+    "price_level": 0,
+    "tags": [
+      "nature",
+      "vue",
+      "randonnee"
+    ],
+    "image_query": "Mont Fébé Yaoundé",
+    "image_seed": "mont-febe-yaounde"
+  },
+  {
+    "id": 15,
+    "name": "Restaurant Le Vietnam",
+    "category": "restaurant",
+    "lat": 3.8794,
+    "lng": 11.5205,
+    "quartier": "Bastos",
+    "description": "Table réputée de Bastos servant une cuisine asiatique raffinée dans un cadre élégant et discret.",
+    "description_en": "A well-regarded Bastos restaurant serving refined Asian cuisine in an elegant, discreet setting.",
+    "rating": 4.5,
+    "price_level": 3,
+    "tags": [
+      "gastronomie",
+      "asiatique"
+    ],
+    "image_query": "restaurant Bastos Yaoundé",
+    "image_seed": "restaurant-vietnam-yaounde"
+  },
+  {
+    "id": 16,
+    "name": "Restaurant La Fourchette",
+    "category": "restaurant",
+    "lat": 3.8611,
+    "lng": 11.5177,
+    "quartier": "Centre-ville",
+    "description": "Institution du centre-ville alliant plats camerounais traditionnels et cuisine internationale conviviale.",
+    "description_en": "A downtown institution combining traditional Cameroonian dishes with convivial international cuisine.",
+    "rating": 4.3,
+    "price_level": 2,
+    "tags": [
+      "local",
+      "convivial"
+    ],
+    "image_query": "Cameroonian food restaurant Yaoundé",
+    "image_seed": "restaurant-fourchette-yaounde"
+  },
+  {
+    "id": 17,
+    "name": "Hôtel Hilton Yaoundé",
+    "category": "hotel",
+    "lat": 3.8636,
+    "lng": 11.5158,
+    "quartier": "Centre-ville",
+    "description": "Hôtel de standing international au cœur de la capitale, piscine, restaurants et vue sur la ville.",
+    "description_en": "An international-standard hotel in the heart of the capital, with a pool, restaurants and city views.",
+    "rating": 4.5,
+    "price_level": 4,
+    "tags": [
+      "luxe",
+      "affaires"
+    ],
+    "image_query": "Hilton Yaoundé hotel",
+    "image_seed": "hilton-yaounde"
+  },
+  {
+    "id": 18,
+    "name": "Hôtel Mont Fébé",
+    "category": "hotel",
+    "lat": 3.9,
+    "lng": 11.5194,
+    "quartier": "Fébé",
+    "description": "Hôtel historique perché sur la colline de Fébé, golf, calme et vue panoramique sur les sept collines.",
+    "description_en": "A historic hotel perched on Mount Fébé, with a golf course, calm surroundings and panoramic views of the seven hills.",
+    "rating": 4.2,
+    "price_level": 3,
+    "tags": [
+      "vue",
+      "detente",
+      "golf"
+    ],
+    "image_query": "Hôtel Mont Fébé Yaoundé",
+    "image_seed": "hotel-mont-febe-yaounde"
+  },
+  {
+    "id": 19,
+    "name": "Monument de la Réunification",
+    "category": "monument",
+    "lat": 3.8608,
+    "lng": 11.5205,
+    "quartier": "Centre-ville",
+    "description": "Symbole national commémorant la réunification du Cameroun anglophone et francophone en 1961.",
+    "description_en": "A national symbol commemorating the 1961 reunification of English- and French-speaking Cameroon.",
+    "rating": 4.4,
+    "price_level": 0,
+    "tags": [
+      "histoire",
+      "symbole"
+    ],
+    "image_query": "Monument de la Réunification Yaoundé",
+    "image_seed": "monument-reunification-yaounde"
+  },
+  {
+    "id": 20,
+    "name": "Quartier Bastos",
+    "category": "quartier",
+    "lat": 3.8833,
+    "lng": 11.5167,
+    "quartier": "Bastos",
+    "description": "Quartier diplomatique verdoyant et huppé, ambassades, restaurants chics et rues arborées.",
+    "description_en": "A leafy, upscale diplomatic district — embassies, chic restaurants and tree-lined streets.",
+    "rating": 4.4,
+    "price_level": 3,
+    "tags": [
+      "balade",
+      "chic"
+    ],
+    "image_query": "Bastos Yaoundé neighbourhood",
+    "image_seed": "quartier-bastos-yaounde"
+  },
+  {
+    "id": 21,
+    "name": "Stade Omnisports Ahmadou Ahidjo",
+    "category": "sport",
+    "lat": 3.8917,
+    "lng": 11.5378,
+    "quartier": "Mfandena",
+    "description": "Le grand stade national de la capitale, théâtre des matchs des Lions Indomptables et des grands événements sportifs.",
+    "description_en": "The capital's main national stadium, host to the Indomitable Lions and major sporting events.",
+    "rating": 4.3,
+    "price_level": 1,
+    "tags": [
+      "sport",
+      "evenements"
+    ],
+    "image_query": "Stade Ahmadou Ahidjo Yaoundé",
+    "image_seed": "stade-ahidjo-yaounde"
+  },
+  {
+    "id": 22,
+    "name": "Aéroport International de Yaoundé Nsimalen",
+    "category": "transport",
+    "lat": 3.7226,
+    "lng": 11.5533,
+    "quartier": "Nsimalen",
+    "description": "La porte d'entrée aérienne de la capitale, à une trentaine de minutes du centre-ville.",
+    "description_en": "The capital's main airport, about thirty minutes from downtown Yaoundé.",
+    "rating": 3.8,
+    "price_level": 1,
+    "tags": [
+      "transport",
+      "voyage"
+    ],
+    "image_query": "Yaoundé Nsimalen International Airport",
+    "image_seed": "aeroport-nsimalen-yaounde"
+  },
+  {
+    "id": 23,
+    "name": "Gare Voyageurs de Yaoundé",
+    "category": "transport",
+    "lat": 3.8664,
+    "lng": 11.5442,
+    "quartier": "Mvog-Ada",
+    "description": "Gare ferroviaire historique reliant Yaoundé à Douala et au nord du pays via le Transcamerounais.",
+    "description_en": "A historic railway station linking Yaoundé to Douala and the north via the Transcameroon line.",
+    "rating": 3.9,
+    "price_level": 1,
+    "tags": [
+      "transport",
+      "histoire"
+    ],
+    "image_query": "Gare de Yaoundé train station",
+    "image_seed": "gare-yaounde"
+  },
+  {
+    "id": 24,
+    "name": "Basilique Marie Reine des Apôtres de Mvolyé",
+    "category": "religieux",
+    "lat": 3.8608,
+    "lng": 11.5069,
+    "quartier": "Mvolyé",
+    "description": "Basilique perchée sur la colline de Mvolyé, offrant l'une des plus belles vues panoramiques de la ville.",
+    "description_en": "A basilica perched on Mvolyé hill, offering one of the finest panoramic views over the city.",
+    "rating": 4.6,
+    "price_level": 0,
+    "tags": [
+      "religion",
+      "vue",
+      "architecture"
+    ],
+    "image_query": "Basilique Mvolyé Yaoundé",
+    "image_seed": "basilique-mvolye-yaounde"
+  },
+  {
+    "id": 25,
+    "name": "Santa Lucia Shopping Mall",
+    "category": "shopping",
+    "lat": 3.8797,
+    "lng": 11.5203,
+    "quartier": "Bastos",
+    "description": "Centre commercial moderne de Bastos réunissant boutiques, supermarché et restauration rapide.",
+    "description_en": "A modern Bastos shopping mall bringing together boutiques, a supermarket and fast food.",
+    "rating": 4.1,
+    "price_level": 2,
+    "tags": [
+      "shopping",
+      "moderne"
+    ],
+    "image_query": "Santa Lucia Mall Yaoundé",
+    "image_seed": "santa-lucia-mall-yaounde"
+  },
+  {
+    "id": 26,
+    "name": "Canal Olympia Yaoundé",
+    "category": "cinema",
+    "lat": 3.874,
+    "lng": 11.5223,
+    "quartier": "Warda",
+    "description": "Salle de cinéma moderne proposant projections, concerts et événements culturels.",
+    "description_en": "A modern cinema hosting film screenings, concerts and cultural events.",
+    "rating": 4.4,
+    "price_level": 2,
+    "tags": [
+      "divertissement",
+      "culture"
+    ],
+    "image_query": "Canal Olympia cinema Yaoundé",
+    "image_seed": "canal-olympia-yaounde"
+  },
+  {
+    "id": 27,
+    "name": "Village Artisanal de Yaoundé",
+    "category": "marche",
+    "lat": 3.874,
+    "lng": 11.501,
+    "quartier": "Nlongkak",
+    "description": "Marché dédié à l'artisanat camerounais : sculptures, bronzes, tissus et objets d'art à ramener chez soi.",
+    "description_en": "A market dedicated to Cameroonian crafts — carvings, bronzes, fabrics and art pieces to take home.",
+    "rating": 4.2,
+    "price_level": 1,
+    "tags": [
+      "artisanat",
+      "shopping",
+      "culture"
+    ],
+    "image_query": "Village Artisanal Yaoundé crafts market",
+    "image_seed": "village-artisanal-yaounde"
+  },
+  {
+    "id": 28,
+    "name": "Jardin Zoologique de Mvog-Betsi",
+    "category": "parc",
+    "lat": 3.8544,
+    "lng": 11.5028,
+    "quartier": "Mvog-Betsi",
+    "description": "Petit zoo urbain hébergeant des espèces camerounaises, dont plusieurs primates sauvés du braconnage.",
+    "description_en": "A small urban zoo housing native Cameroonian species, including several primates rescued from poaching.",
+    "rating": 4.0,
+    "price_level": 1,
+    "tags": [
+      "nature",
+      "faune",
+      "famille"
+    ],
+    "image_query": "Mvog-Betsi Zoo Yaoundé",
+    "image_seed": "zoo-mvogbetsi-yaounde"
+  },
+  {
+    "id": 29,
+    "name": "Institut Français du Cameroun",
+    "category": "culture",
+    "lat": 3.8672,
+    "lng": 11.5172,
+    "quartier": "Centre-ville",
+    "description": "Centre culturel accueillant expositions, projections et spectacles, lieu de rencontre des artistes locaux.",
+    "description_en": "A cultural centre hosting exhibitions, screenings and performances, a meeting place for local artists.",
+    "rating": 4.5,
+    "price_level": 0,
+    "tags": [
+      "culture",
+      "art",
+      "evenements"
+    ],
+    "image_query": "Institut Français du Cameroun Yaoundé",
+    "image_seed": "institut-francais-yaounde"
+  },
+  {
+    "id": 30,
+    "name": "Immeuble de la BEAC",
+    "category": "monument",
+    "lat": 3.8664,
+    "lng": 11.517,
+    "quartier": "Centre-ville",
+    "description": "Siège emblématique de la banque centrale, l'une des tours les plus reconnaissables du centre-ville.",
+    "description_en": "The landmark headquarters of the central bank, one of the most recognisable towers downtown.",
+    "rating": 4.0,
+    "price_level": 0,
+    "tags": [
+      "architecture",
+      "affaires"
+    ],
+    "image_query": "BEAC building Yaoundé",
+    "image_seed": "beac-yaounde"
+  }
+]
